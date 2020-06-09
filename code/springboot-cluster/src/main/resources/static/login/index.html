@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <title>用户登陆</title>
+    <script type="text/javascript" src="/lagou/static/login/jquery-3.4.1.min.js"></script>
+    
+    <style type="text/css">
+        body {
+            width: 100%;
+            height: 100%;
+            background: aquamarine;
+            text-align: center;
+        }
+
+        .login-pane {
+            position: absolute;
+            width: 500px;
+            height: 300px;
+            top: 50%;
+            left: 50%;
+            margin-top: -250px;
+            margin-left: -250px;
+            background: #fff;
+            border-radius: 4px;
+            box-shadow: 0 0 10px #12a591;
+            padding: 57px 50px 35px;
+            box-sizing: border-box
+        }
+
+        .submitBtn {
+            display: block;
+            text-decoration: none;
+            height: 48px;
+            width: 150px;
+            line-height: 48px;
+            font-size: 16px;
+            color: #fff;
+            text-align: center;
+            background-image: -webkit-gradient(linear, left top, right top, from(#09cb9d), to(#02b389));
+            background-image: linear-gradient(90deg, #09cb9d, #02b389);
+            border-radius: 3px
+        }
+
+        input{
+            height: 30px;
+            width: 250px;
+        }
+    </style>
+
+    <script type="text/javascript">
+        $(function(){
+            $(".submitBtn").bind("click",function(){
+                let name = $("#user-name").val();
+                let password = $("#password").val();
+                if(name.trim().length==0 || password.trim().length==0){
+                    alert("请输入完整账号密码");
+                    return;
+                }
+                $.ajax({
+                    url:'/lagou/user/check',
+                    type:'POST',    //GET
+                    async:false,    //或false,是否异步
+                    data:{
+                        userName:name,
+                        password:password
+                    },
+                    timeout:5000,    //超时时间
+                    dataType:'text', //返回的数据格式：json/xml/html/script/jsonp/text
+                    success:function(data){
+                        if("login success" == data){
+                            setInterval(function () {
+                                window.location.href="/lagou/resume";
+                            },500)
+                        }else{
+                            alert("登陆失败 请检查用户名密码");
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+    
+</head>
+<body>
+
+
+<form>
+    <table class="login-pane">
+        <tr>
+            <td align="right"><span>用户名</span></td>
+            <td align="center">
+                <input type="text" id="user-name" value="admin"/>
+            </td>
+        </tr>
+        <tr>
+            <td align="right"><span>密码</span></td>
+            <td align="center">
+                <input type="password" id="password"/>
+            </td>
+        </tr>
+        <tr align="center">
+            <td colspan="2">
+                <a class="submitBtn"><span>登 录</span></a>
+            </td>
+        </tr>
+    </table>
+</form>
+
+
+</body>
+</html>
